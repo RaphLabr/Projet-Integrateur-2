@@ -1,0 +1,109 @@
+@use 'colors' as *;
+
+.content {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 6.5rem;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    height: calc(100vh - 6.5rem);
+    column-gap: 1rem;
+}
+
+.main-container {
+    box-sizing: border-box;
+    height: auto;
+    width: auto;
+    min-height: calc(60vh + 6rem);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1rem;
+    background-color: color(primary, 'light');
+    border-radius: 25px;
+    border: 3px solid color(secondary);
+    box-shadow: 0 2px 4px color(shadow, 'medium');
+}
+
+.table-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2vh;
+}
+
+.chat {
+    flex: 0 0 0 auto;
+    width: 25vw;
+    height: 60vh;
+}
+
+caption {
+    font-size: 2rem;
+    font-weight: bold;
+    padding: 0.5rem;
+    color: color(secondary, 'darker');
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: color(secondary, 'light');
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+th,
+td {
+    padding: 0.75rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid color(grey-scale, 'lighter');
+    font-size: 1.5rem;
+}
+
+thead th {
+    background-color: color(secondary, 'base');
+    color: color(secondary, 'light');
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease;
+}
+
+thead th:hover {
+    background-color: color(secondary, 'dark');
+}
+
+tbody tr:hover {
+    background-color: color(secondary, 'light');
+}
+th.selected {
+    background-color: color(secondary, 'dark-contrast') !important;
+    font-weight: 600;
+}
+
+.no-hover:hover {
+    background-color: color(secondary, 'base') !important;
+}
+
+.leave-button-container {
+    margin-top: 5vh;
+    width: fit-content;
+    padding: 1rem;
+    box-sizing: border-box;
+    font-size: 2rem;
+    border-radius: 25px;
+    background-color: color(button, 'red-base');
+    border: 3px solid color(secondary, 'light');
+    color: color(secondary, 'light');
+    cursor: pointer;
+}
+
+.leave-button-container:hover {
+    background-color: color(button, 'red-dark');
+}

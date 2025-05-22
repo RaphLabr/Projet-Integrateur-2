@@ -1,0 +1,89 @@
+<div class="content">
+    <div class="apply-tools-container" [class.ctf-container]="mode === 'Capture du drapeau'" [class.classic-container]="mode === 'Classique'">
+        <div class="tool-category">Tuiles</div>
+        @for(typeTool of typeTools; track $index) {
+        <div class="tool-container" [style.height]="cssHeightOfTool">
+            <img
+                draggable="false"
+                src="assets/tiles/{{ typeTool.type }}.png"
+                alt="image not found"
+                class="tool"
+                [ngClass]="{ 'selected-tool': typeTool.type === selectedTileTool }"
+                (click)="onTypeToolClick(typeTool.type)"
+            />
+            <div class="tool-description">{{ typeTool.description }}</div>
+        </div>
+        }
+        <div class="tool-category">Items</div>
+        <div class="item-count">Items réguliers restants: {{ numberOfItemsLeft }}</div>
+        <div class="item-count">Points de départ restants: {{ numberOfStartPositionsLeft }}</div>
+        @for(item of allItems; track $index) {
+        <div class="tool-container" [style.height]="cssHeightOfTool">
+            @if(item === 'start-position' && numberOfStartPositionsLeft !== 0) {
+                <div class="number-of-items">{{ numberOfStartPositionsLeft }}</div>
+            }
+            @if(item === 'random' && numberOfItemsLeft !== 0) {
+                <div class="number-of-items">{{ numberOfItemsLeft }}</div>
+            }
+            <img
+                src="assets/items/{{ item }}.png"
+                alt="image not found"
+                class="tool"
+                [class.placed-item-tool]="isItemPlaced(item)"
+                [draggable]="!isItemPlaced(item)"
+                (dragover)="$event.preventDefault()"
+                (drop)="onItemToolDrop($event, item)"
+                (dragstart)="this.draggedItem = item"
+            />
+            <div class="tool-description">{{ itemDescriptions.get(item) }}</div>
+        </div>
+        }
+    </div>
+    <div class="game-map-container">
+        <app-game-map
+            class="game-map"
+            [size]="mapSize"
+            [gameMap]="this.gameMap"
+            [isInGamePage]="false"
+            (tileLeftMouseDown)="onTileLeftMouseDown($event)"
+            (tileRightMouseDown)="onTileRightMouseDown($event)"
+            (tileEnter)="onTileEnter($event)"
+            (tileDrop)="onTileDrop($event)"
+            (tileRightMouseUp)="onTileRightMouseUp($event)"
+            (itemDragStart)="onItemDragFromMapStart($event)"
+            (itemDragEnd)="onItemDragFromMapEnd()"
+        ></app-game-map>
+    </div>
+    <div class="right-side-tools-container">
+        <div class="game-title-description-container">
+            <div class="title">Titre de la carte</div>
+            <input
+                class="game-title"
+                id="game-title"
+                type="text"
+                placeholder="Entrez un titre"
+                [value]="mapTitle"
+                (input)="updateTitle($event)"
+                maxlength="50"
+            />
+            <div class="title">Description</div>
+            <div class="game-description-box">
+                <textarea
+                    class="game-description"
+                    id="game-description"
+                    placeholder="Entrez une description"
+                    [value]="mapDescription"
+                    (input)="updateDescription($event)"
+                    maxlength="500"
+                ></textarea>
+            </div>
+        </div>
+        <div class="button-container">
+            <button class="button" (click)="onReinitializeClick()">Réinitialiser</button>
+        </div>
+
+        <div class="button-container">
+            <button class="button" (click)="onSave()">Sauvegarder</button>
+        </div>
+    </div>
+</div>

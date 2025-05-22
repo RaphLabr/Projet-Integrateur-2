@@ -1,0 +1,15 @@
+export enum CharacterType {
+    NoCharacter = 'no-character',
+    Character1 = 'c1',
+    Character2 = 'c2',
+    Character3 = 'c3',
+    Character4 = 'c4',
+    Character5 = 'c5',
+    Character6 = 'c6',
+    Character7 = 'c7',
+    Character8 = 'c8',
+    Character9 = 'c9',
+    Character10 = 'c10',
+    Character11 = 'c11',
+    Character12 = 'c12',
+}

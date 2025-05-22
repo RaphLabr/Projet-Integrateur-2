@@ -1,0 +1,234 @@
+<div class="content">
+    <div class="left-container">
+        <div class="game-info-container">
+            <div class="game-info-name">Jeu : {{ gameDisplay.gameName }}</div>
+            <div>Taille : {{ gameDisplay.mapSize }}</div>
+            <div class="active-player">Joueur actif: {{ gameDisplay.currentPlayerName }}</div>
+            <div>Nombre de joueurs: {{ gameDisplay.numberOfPlayers }}</div>
+            <div>Mode de jeu: {{ gameModeString }}</div>
+        </div>
+
+        <div class="box-choice-wrapper">
+            <mat-button-toggle-group (change)="scrollLogsOrChat()" class="box-choice" [(ngModel)]="isChatToggled" vertical>
+                <div class="box-row">
+                    <mat-button-toggle [value]="true" class="toggle-button chat-toggle">Clavardage</mat-button-toggle>
+                    <mat-button-toggle [value]="false" class="toggle-button log-toggle">Journal</mat-button-toggle>
+                </div>
+                <mat-checkbox [(ngModel)]="isFilterChecked" (change)="scrollLogs()" class="filter-container" [hidden]="isChatToggled"
+                    ><div class="filter-checkbox">Filtre personnel</div></mat-checkbox
+                >
+            </mat-button-toggle-group>
+        </div>
+
+        <div [hidden]="!isChatToggled" class="chat-container">
+            <app-chat-box [gameId]="gameId" [playerName]="clientPlayer.name" id="chat"></app-chat-box>
+        </div>
+        <div [hidden]="isChatToggled" class="logbox">
+            <div #LogBox [hidden]="isFilterChecked" class="logs">
+                @for (log of logs; track $index) {
+                <div class="log">{{ log }}<br /></div>
+                }
+            </div>
+            <div #FilteredLogBox [hidden]="!isFilterChecked" class="logs">
+                @for (log of filteredlogs; track $index) {
+                <div class="log">{{ log }}<br /></div>
+                }
+            </div>
+        </div>
+    </div>
+    @if (gameDisplay.notification) {
+    <div class="notification-box">{{ gameDisplay.notification }}</div>
+    } @if (clientPlayer.items.length > 2) {
+    <div class="notification-box item-drop-box">
+        <div class="notification-text">Votre inventaire est plein, veuillez choisir un item à délaisser</div>
+        <div class="inventory-container">
+            <div class="inventory-slot drop-slot" (click)="dropItem(0)">
+                <img class="item" draggable="false" src="{{ 'assets/items/' + clientPlayer.items[0] + '.png' }}" />
+            </div>
+            <div class="inventory-slot drop-slot" (click)="dropItem(1)">
+                <img class="item" draggable="false" src="{{ 'assets/items/' + clientPlayer.items[1] + '.png' }}" />
+            </div>
+            <div class="inventory-slot drop-slot" (click)="dropItem(2)">
+                <img class="item" draggable="false" src="{{ 'assets/items/' + clientPlayer.items[2] + '.png' }}" />
+            </div>
+        </div>
+    </div>
+    }
+    <div class="middle-container" (contextmenu)="$event.preventDefault()">
+        <app-game-map
+            class="game-map"
+            [size]="mapSize"
+            [gameMap]="map"
+            [isInGamePage]="true"
+            (contextmenu)="$event.preventDefault()"
+            (tileLeftMouseDown)="onTileLeftMouseDown($event)"
+            (tileRightMouseDown)="onTileRightMouseDown($event)"
+            (tileEnter)="onTileHover($event)"
+            (tileMouseLeave)="onTileLeave()"
+            (mouseleave)="onMapLeave()"
+        >
+        </app-game-map>
+        <div [hidden]="!pageService.isClientInCombat" class="combat-box">
+            <div class="combat-top-row">
+                <div class="combat-column">
+                    <div class="combat-img-box enemy-player ennemy-player-box" [class.active-player-box]="!isClientTurnToAttack">
+                        <img
+                            class="main-player-img player-img-background ennemy-player-img"
+                            src="{{ 'assets/characters/' + pageService.enemyPlayer?.id + '.png' }}"
+                        />
+                    </div>
+                    <div class="combat-info ennemy-player-box">{{ pageService.enemyPlayer?.name }}</div>
+                </div>
+                <div class="combat-column">
+                    <div class="combat-img-box client-player-box" [class.active-player-box]="isClientTurnToAttack">
+                        <img
+                            class="main-player-img player-img-background client-player-img"
+                            src="{{ 'assets/characters/' + clientPlayer.id + '.png' }}"
+                        />
+                    </div>
+                    <div class="combat-info client-player-box">
+                        {{ clientPlayer.name }} <br />
+                        Tentatives d'évasion restantes: {{ 2 - clientPlayer.evadeAttempts }}
+                    </div>
+                </div>
+            </div>
+            <div class="combat-text-result-box">
+                <div #CombatMessages class="combat-text-result">
+                    @for (combatMessage of combatMessages; track $index){
+                    <div [style.color]="combatMessage.color" class="combat-message" [innerHtml]="combatMessage.message"></div>
+                    }
+                </div>
+            </div>
+            <div class="combat-bottom-row">
+                <div class="timeleft" style="font-size: 1.5rem; padding: 1rem">
+                    TEMPS RESTANT : {{ !pageService.isClientInCombat && gameState.isGameInCombat ? '-' : gameDisplay.timeLeft }}
+                </div>
+
+                <button class="combat-button" [disabled]="!isClientTurnToAttack" (click)="combatAttack()">ATTAQUER</button>
+                <button class="combat-button" [disabled]="!isClientTurnToAttack || clientPlayer.evadeAttempts >= 2" (click)="combatEvade()">
+                    ÉVADER
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="timeline-box">
+        <div class="timeline">
+            @for (player of gameDisplay.playerDisplay; track player.id; let index = $index){
+            <div class="timeline-player-wrapper">
+                <div
+                    class="timeline-player-box"
+                    [class.active-player-box]="player.name === gameDisplay.currentPlayerName"
+                    [style.background-color]="getTeamColor(player.team)"
+                >
+                    <div class="player-img-container">
+                        <img src="{{ 'assets/characters/' + player.id + '.png' }}" alt="Character Image" class="player-img" />
+                    </div>
+                    <div class="timeline-info">
+                        <div
+                            class="player-name"
+                            [style.text-decoration]="player.hasAbandoned ? 'line-through' : 'none'"
+                            [style.text-decoration-thickness]="player.hasAbandoned ? '3px' : 'initial'"
+                            [style.text-decoration-color]="player.hasAbandoned ? 'red' : 'initial'"
+                        >
+                            {{ player.name }}
+                        </div>
+                        <div
+                            class="player-win"
+                            [style.text-decoration]="player.hasAbandoned ? 'line-through' : 'none'"
+                            [style.text-decoration-thickness]="player.hasAbandoned ? '3px' : 'initial'"
+                            [style.text-decoration-color]="player.hasAbandoned ? 'red' : 'initial'"
+                        >
+                            Wins: {{ player.wins }}
+                        </div>
+                        @if (player.id === gameDisplay.adminCharacterId) {
+                        <div class="player-row">Admin <img src="{{ 'assets/admin.png' }}" alt="Admin Image" class="admin-img" /></div>
+                        } @if (player.isAI){
+                        <div class="player-row">Bot <img src="{{ 'assets/ai.png' }}" alt="Bot Image" class="ai-img" /></div>
+                        } @if (player.id === gameDisplay.flagCharacterId) {
+                        <div class="item-row"><img src="{{ 'assets/items/flag.png' }}" alt="Flag Image" class="admin-img" /></div>
+                        }
+                    </div>
+                </div>
+                <div class="player-name-full main-label">{{ player.name }}</div>
+            </div>
+            }
+        </div>
+        <div [hidden]="pageService.isClientInCombat" class="timeleft-box">
+            <p>TEMPS RESTANT :</p>
+            <div class="timeleft">{{ !pageService.isClientInCombat && gameState.isGameInCombat ? '-' : gameDisplay.timeLeft }}</div>
+        </div>
+        @if (showTileContext) {
+        <div class="tile-context" (click)="closeTileInfo()">
+            <p>{{ getTileDescription() }}</p>
+            @if (tileHasItem) {
+            <p>Description de l'objet: {{ itemDescription }}</p>
+            } @if(tileHasCharacter){
+            <p>Nom du joueur: {{ contextPlayerName }}</p>
+            <img class="context-img" [src]="'assets/characters/' + contextPlayerId + '.png'" />
+            }
+        </div>
+        }
+    </div>
+
+    <div class="right-container">
+        <div class="right-container-top-row">
+            <div class="main-player-img-container">
+                <img class="main-player-img" src="{{ 'assets/characters/' + clientPlayer.id + '.png' }}" draggable="false" />
+            </div>
+            <div class="main-stats-box">
+                <div>PV : {{ clientPlayer.health }}</div>
+                <div>Attaque : {{ clientPlayer.attack }}</div>
+                <div>Rapidité : {{ clientPlayer.speed }}</div>
+                <div>Défense : {{ clientPlayer.defense }}</div>
+                <div>Actions : {{ gameState.isClientPlaying ? (isActionUsed ? 0 : 1) : 0 }}</div>
+            </div>
+        </div>
+        <div class="main-player-name" maxlength="25">{{ clientPlayer.name }}</div>
+        <div class="dice-row">
+            <div class="main-label">
+                BONUS ATK
+                <div class="main-attribute">D{{ clientPlayer.dice.attack }}</div>
+            </div>
+            <div class="main-label">
+                BONUS DEF
+                <div class="main-attribute">D{{ clientPlayer.dice.defense }}</div>
+            </div>
+        </div>
+        <div class="main-label">
+            MOUVEMENT RESTANT
+            <div class="main-attribute">{{ gameState.isClientPlaying ? movementLeft : '0' }}</div>
+        </div>
+        <div class="main-label">
+            INVENTAIRE
+            <div class="inventory-slot">
+                @if (clientPlayer.items[0]) {
+                <img class="item" draggable="false" src="{{ 'assets/items/' + clientPlayer.items[0] + '.png' }}" />
+                }
+            </div>
+            <div class="inventory-slot">
+                @if (clientPlayer.items[1]) {
+                <img class="item" draggable="false" src="{{ 'assets/items/' + clientPlayer.items[1] + '.png' }}" />
+                }
+            </div>
+        </div>
+        <div class="right-container-bottom-row">
+            <button
+                class="action-button-container"
+                [class.action-button-enabled]="!isActionUsed && gameState.isActionEnabled"
+                [disabled]="isActionUsed || gameState.isGameInCombat || gameState.isInMovement || gameDisplay.notification"
+                (click)="onActionButtonClick()"
+            >
+                ACTION
+            </button>
+            <button
+                class="end-button-container"
+                [disabled]="!gameState.isClientPlaying || gameState.isGameInCombat || gameState.isInMovement"
+                (click)="onEndRoundClick()"
+            >
+                TERMINER
+            </button>
+        </div>
+        <button class="leave-button-container" (click)="onQuitGameClick()">ABANDONNER</button>
+    </div>
+</div>

@@ -1,0 +1,115 @@
+<div class="content">
+    <div class="main-container">
+        <app-chat-box class="chat" [gameId]="gameId" [playerName]="playerName || ''"></app-chat-box>
+        <div class="table-container">
+            <table>
+                <caption>
+                    Statistiques des joueurs
+                </caption>
+                <thead>
+                    <tr>
+                        <th scope="col" [class.selected]="selectedStat === undefined" (click)="selectedStat = undefined; sortPlayersByName()">
+                            Noms
+                        </th>
+                        <th scope="col" [class.selected]="selectedStat === statType.Wins" (click)="selectedStat = statType.Wins; filterColumn()">
+                            Victoires
+                        </th>
+                        <th scope="col" [class.selected]="selectedStat === statType.Losses" (click)="selectedStat = statType.Losses; filterColumn()">
+                            Défaites
+                        </th>
+                        <th
+                            scope="col"
+                            [class.selected]="selectedStat === statType.Evasions"
+                            (click)="selectedStat = statType.Evasions; filterColumn()"
+                        >
+                            Évasions
+                        </th>
+                        <th
+                            scope="col"
+                            [class.selected]="selectedStat === statType.LivesLost"
+                            (click)="selectedStat = statType.LivesLost; filterColumn()"
+                        >
+                            Vies perdues
+                        </th>
+                        <th
+                            scope="col"
+                            [class.selected]="selectedStat === statType.LivesTaken"
+                            (click)="selectedStat = statType.LivesTaken; filterColumn()"
+                        >
+                            Dégâts infligés
+                        </th>
+                        <th
+                            scope="col"
+                            [class.selected]="selectedStat === statType.ItemsPicked"
+                            (click)="selectedStat = statType.ItemsPicked; filterColumn()"
+                        >
+                            Items pris
+                        </th>
+                        @if (globalStatistics.playersWithFlag > 0){
+                        <th
+                            scope="col"
+                            [class.selected]="selectedStat === statType.FlagsPicked"
+                            (click)="selectedStat = statType.FlagsPicked; filterColumn()"
+                        >
+                            Drapeaux pris
+                        </th>
+                        }
+                        <th
+                            scope="col"
+                            [class.selected]="selectedStat === statType.TerrainPercentage"
+                            (click)="selectedStat = statType.TerrainPercentage; filterColumn()"
+                        >
+                            % Terrain parcouru
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (player of playerStatistics; track $index) {
+                    <tr>
+                        <th scope="row">{{ player.name }}</th>
+                        <td>{{ player.wins }}</td>
+                        <td>{{ player.losses }}</td>
+                        <td>{{ player.evasions }}</td>
+                        <td>{{ player.livesLost }}</td>
+                        <td>{{ player.livesTaken }}</td>
+                        <td>{{ player.itemsPicked }}</td>
+                        @if (globalStatistics.playersWithFlag > 0){
+                        <td>{{ player.flagsPicked }}</td>
+                        }
+                        <td>{{ player.terrainPercentage }}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+
+            <table>
+                <caption>
+                    Statistiques globales
+                </caption>
+                <thead>
+                    <tr>
+                        <th scope="col" class="no-hover">Temps de jeu</th>
+                        <th scope="col" class="no-hover">Nombre de tours</th>
+                        <th scope="col" class="no-hover">% Terrain parcouru</th>
+                        <th scope="col" class="no-hover">% Portes manipulées</th>
+                        @if (globalStatistics.playersWithFlag > 0){
+                        <th scope="col" class="no-hover">Joueurs ayant eu le drapeau</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">{{ globalStatistics.gameTime }}</th>
+                        <td>{{ globalStatistics.rounds }}</td>
+                        <td>{{ globalStatistics.totalTerrainPercentage }}</td>
+                        <td>{{ globalStatistics.doorsToggledPercentage }}</td>
+                        @if (globalStatistics.playersWithFlag > 0){
+                        <td>{{ globalStatistics.playersWithFlag }}</td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+            <div class="leave-button-container" (click)="quitPage()">QUITTER</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,194 @@
+@use 'colors' as *;
+
+.img-hidden {
+    position: absolute;
+    top: 0;
+    border-radius: 25px;
+    height: 15rem;
+    width: 15rem;
+    margin: 1rem;
+    background: color(shadow, 'medium');
+    z-index: 2;
+    color: color(secondary, 'light');
+    font-size: 2rem;
+    text-align: center;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+}
+
+.img-hidden.hidden {
+    opacity: 1;
+}
+
+.button-box {
+    background-color: color(secondary);
+    border-radius: 25px;
+    border: black solid 2px;
+    box-sizing: border-box;
+    margin-right: 0.5rem;
+    text-align: center;
+    display: flex;
+    place-items: center;
+    width: auto;
+    padding: 0.5rem;
+}
+
+.button-box:hover {
+    cursor: pointer;
+    background-color: color(secondary, 'dark-contrast');
+}
+
+.create-button {
+    background-color: color(button, 'green-base');
+    border: color(secondary, 'light') solid 2px;
+    color: color(secondary, 'light');
+    border-radius: 25px;
+    justify-content: center;
+    padding: 0.8rem;
+    margin-left: auto;
+    position: absolute;
+    top: 0.4rem;
+    right: 5rem;
+    z-index: 11;
+    font-size: 2rem;
+}
+
+.create-button:hover {
+    cursor: pointer;
+    background-color: color(button, 'green-dark');
+}
+
+.size-choice {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: color(shadow, 'medium');
+    z-index: 3;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    display: none;
+}
+
+.size-choice.hidden {
+    display: flex;
+}
+
+.form-box {
+    z-index: 4;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+}
+
+.size-column {
+    display: flex;
+    flex-direction: row;
+    gap: 4rem;
+}
+
+.size-button {
+    background-color: color(button, 'green-base');
+    color: color(secondary, 'light');
+    font-size: 2rem;
+    border: color(secondary, 'light') solid 2px;
+    border-radius: 50px;
+    height: 10rem;
+    width: 10rem;
+    text-align: center;
+    padding: 1rem;
+    display: grid;
+    place-items: center;
+}
+
+.size-button:hover {
+    cursor: pointer;
+    background-color: color(button, 'green-dark');
+}
+
+.toggleCheckbox {
+    display: none;
+}
+
+.toggleContainer {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 30rem;
+    height: 3rem;
+    border: 3px solid color(primary, 'light-orange');
+    border-radius: 25px;
+    background: color(primary, 'light-orange');
+    color: color(primary, 'dark-orange');
+}
+
+.toggleContainer:hover {
+    cursor: pointer;
+}
+
+.toggleContainer::before {
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    left: 0%;
+    border-radius: 25px;
+    background: color(primary, 'dark-orange');
+    transition: all 0.3s;
+}
+
+.toggleContainer div {
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    z-index: 5;
+}
+
+.toggleCheckbox:checked + .toggleContainer::before {
+    left: 50%;
+}
+
+.toggleCheckbox:checked + .toggleContainer div:first-child {
+    color: color(primary, 'dark-orange');
+    transition: color 0.3s;
+}
+
+.toggleCheckbox:checked + .toggleContainer div:last-child {
+    color: color(primary, 'light-orange');
+    transition: color 0.3s;
+}
+
+.toggleCheckbox + .toggleContainer div:first-child {
+    color: color(primary, 'light-orange');
+    transition: color 0.3s;
+}
+
+.toggleCheckbox + .toggleContainer div:last-child {
+    color: color(primary, 'dark-orange');
+    transition: color 0.3s;
+}
+
+.return-button {
+    background-color: color(button, 'red-base');
+    padding: 1rem;
+    position: relative;
+    border: color(secondary, 'light') solid 2px;
+    color: color(secondary, 'light');
+    border-radius: 25px;
+}
+
+.return-button:hover {
+    background-color: color(button, 'red-dark');
+    cursor: pointer;
+}
+
+.description-box {
+    font-size: 0.9rem;
+}

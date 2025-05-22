@@ -1,0 +1,46 @@
+@use '@angular/material' as mat;
+@include mat.core();
+
+@font-face {
+    font-family: 'Alagard';
+    src:
+        url('../assets/fonts/Alkhemikal.woff2') format('woff2'),
+        url('../assets/fonts/Alkhemikal.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+.mat-icon {
+    font-family: 'Material Icons' !important;
+}
+
+html,
+body {
+    height: 100%;
+    font-size: 18px;
+}
+body {
+    margin: 0;
+}
+
+body * {
+    font-family: 'Alagard', fantasy !important;
+}
+
+.snackbar {
+    color: red;
+    white-space: pre-line;
+    margin-bottom: 10vh !important;
+}
+
+.mdc-snackbar__label,
+.mdc-button__label {
+    font-size: 1.5rem !important;
+    line-height: 1.5rem;
+}
+
+button {
+    user-select: none;
+}

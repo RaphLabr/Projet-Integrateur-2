@@ -1,0 +1,17 @@
+@use 'colors' as *;
+
+.game-count-box {
+    position: absolute;
+    top: 50vh;
+    left: 50vw;
+    background-color: color(primary);
+    border-radius: 25px;
+    border: 3px solid color(primary, 'dark');
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    box-shadow: 0 10px 10px color(shadow, 'medium');
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+}

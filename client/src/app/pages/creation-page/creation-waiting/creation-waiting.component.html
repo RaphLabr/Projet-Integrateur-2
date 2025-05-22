@@ -1,0 +1,57 @@
+@if(!botChoiceVisibility) {
+<div class="bot-choice">
+    <form class="form-box" #formRef="ngForm">
+        <input type="checkbox" id="toggle" class="toggleCheckbox" [(ngModel)]="toggleState" name="toggle" />
+        <label for="toggle" class="toggleContainer">
+            <div>Aggrésif</div>
+            <div>Défensif</div>
+        </label>
+    </form>
+    <div class="create-button" (click)="addAi()">Créer</div>
+    <div class="return-button" (click)="toggleBotChoice()">Retour</div>
+</div>
+}
+<div class="content">
+    <div class="main-content">
+        <app-chat-box class="chat-box" [playerName]="playerName" [gameId]="gameId"></app-chat-box>
+        <div class="game-code">Code pour rejoindre:<br />{{ gameId }}</div>
+        <div class="waiting">
+            Joueurs en attente: @for (user of users; track $index) {
+            <div class="user-box">
+                <img [src]="'assets/characters/' + user.character + '.png'" alt="{{ user.name }}'s profile picture" class="player-img-background" />
+                <span class="user-name">{{ user.name }}</span>
+                @if (user.id.startsWith('AI')){
+                <img src="{{ 'assets/ai.png' }}" alt="AI" class="admin-img" />
+                } @if ($index === 0){
+                <img src="{{ 'assets/admin.png' }}" alt="Admin Image" class="admin-img" />
+                } @if (admin && user.id !== socketId) {
+                <button mat-icon-button color="warn" (click)="onKickUser(user.id)">
+                    <mat-icon>remove_circle</mat-icon>
+                </button>
+                }
+            </div>
+            }
+        </div>
+    </div>
+    @if (admin) {
+    <div class="bottom-button-box">
+        <div>
+            <mat-slide-toggle
+                id="locking"
+                color="accent"
+                [(ngModel)]="isLocked"
+                [disabled]="isGameFull"
+                (change)="onTogglePublic()"
+            ></mat-slide-toggle>
+            Verrouiller
+        </div>
+        <div class="bottom-buttons">
+            <button class="create-button" (click)="startGame()">Débuter</button>
+            <button class="return-button" (click)="disconnect()">Quitter</button>
+            <button class="ai-button" [disabled]="isGameFull || isLocked" (click)="toggleBotChoice()">Add AI</button>
+        </div>
+    </div>
+    } @else {
+    <button class="return-button return-button-not-admin" (click)="disconnect()">Quitter</button>
+    }
+</div>

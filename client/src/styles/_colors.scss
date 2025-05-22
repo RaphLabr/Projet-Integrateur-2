@@ -1,0 +1,74 @@
+@use 'sass:map';
+
+$colors: (
+    primary: (
+        base: burlywood,
+        light: bisque,
+        dark: #8a6d49,
+        light-contrast: cornsilk,
+        dark-contrast: #b49a78,
+        light-hover: #e0c4a2,
+        dark-hover: #d18827,
+        light-orange: #f3bc77,
+        dark-orange: #a55233,
+    ),
+    secondary: (
+        base: #407088,
+        light: white,
+        dark: #155263,
+        dark-contrast: #005792,
+        darker: #234a5e,
+    ),
+    header: (
+        base: #333,
+        text: white,
+    ),
+    button: (
+        green-base: #55a44e,
+        green-dark: #1b8057,
+        red-base: #dc2f2f,
+        red-dark: #bc2525,
+        orange-base: #ff7518,
+        orange-dark: #db6515,
+        yellowgreen-base: yellowgreen,
+        hover-base: purple,
+        disable: gray,
+    ),
+    grey-scale: (
+        lighter: #ccc,
+        light: #888,
+        medium: #555,
+        dark: #333,
+        black-base: black,
+    ),
+    player: (
+        background: #e1bc9c,
+        reachable: lime,
+        path: orange,
+    ),
+    shadow: (
+        lighter: rgba(0, 0, 0, 0.1),
+        light: rgba(0, 0, 0, 0.2),
+        medium: rgba(0, 0, 0, 0.5),
+        dark: rgba(0, 0, 0, 0.7),
+    ),
+    main-page-team: (
+        title: gray,
+        even: purple,
+        odd: blue,
+    ),
+);
+
+@function color($group, $color-name: 'base') {
+    @if not map.has-key($colors, $group) {
+        @error "Color group '#{$group}' not found in $colors map";
+    }
+
+    $group-map: map.get($colors, $group);
+
+    @if not map.has-key($group-map, $color-name) {
+        @error "Color '#{$color-name}' not found in group '#{$group}'";
+    }
+
+    @return map.get($group-map, $color-name);
+}

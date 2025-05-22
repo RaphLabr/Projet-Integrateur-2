@@ -1,0 +1,34 @@
+<div class="map-container" [style.grid-template-rows]="'repeat(' + size + ', 1fr)'" [style.grid-template-columns]="'repeat(' + size + ', 1fr)'">
+    @for (row of gameMap; track $index; let rowIndex = $index) { 
+        @for (tile of row; track $index; let columnIndex = $index) {
+            <div
+                class="tile-container"
+                (mouseleave)="emitTileMouseLeave()"
+                (contextmenu)="$event.preventDefault()"
+                (mouseenter)="emitTileEnter($event, { x: columnIndex, y: rowIndex })"
+                (mousedown)="emitTileMouseDown($event, { x: columnIndex, y: rowIndex })"
+                (mouseup)="emitTileMouseUp($event, { x: columnIndex, y: rowIndex })"
+                (dragover)="$event.preventDefault()"
+                (drop)="emitTileDrop($event, { x: columnIndex, y: rowIndex })"
+            >
+            <img src="{{ 'assets/tiles/' + tile.type + '.png' }}" class="type-img" draggable="false" />
+            @if (tile.character !== 'no-character') {
+                <img src="{{ 'assets/characters/' + tile.character + '.png' }}" class="character-img" draggable="false"/>
+            } @if (tile.item !== 'no-item') {
+                <img
+                    src="{{ 'assets/items/' + tile.item + '.png' }}"
+                    class="item-img"
+                    [draggable]="!isInGamePage"
+                    draggable="true"
+                    (dragstart)="emitItemDragStart(tile.item, { x: columnIndex, y: rowIndex })"
+                    (dragend)="emitItemDragEnd()"
+                />
+                <div class="item-description" [class.bottom-description]="rowIndex < 2" [class.top-description]="rowIndex >= 2" [ngStyle]="{ visibility: isInGamePage ? 'hidden' : 'visible' }">
+                {{ itemDescriptions.get(tile.item) }}
+                </div>
+            }
+            <div class="overlay" [class.active]="tile.isActive" [class.path]="tile.isOnPath"></div>
+            </div>
+        } 
+    }
+</div>

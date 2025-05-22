@@ -1,0 +1,22 @@
+<div class="chatbox">
+    <div class="chatbox-name">{{ playerName }} <br /></div>
+    <div #messagesBox class="messages-box">
+        @for (message of messages; track $index) {
+        <div class="message">{{ message }}<br /></div>
+        }
+    </div>
+    <div class="input-area">
+        <input
+            type="text"
+            id="input-message"
+            class="chat-input"
+            name="name"
+            placeholder="Entrez le message"
+            [(ngModel)]="messageInput"
+            maxlength="200"
+            minlength="1"
+            required
+            (keydown.enter)="sendMessage()"
+        />
+    </div>
+</div>

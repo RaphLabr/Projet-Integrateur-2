@@ -1,0 +1,25 @@
+@if(games.length === 0 ){
+<div class="game-count-box">Jeux disponibles: {{ games.length }}</div>
+}
+<div class="content">
+    @for (game of games; track $index; let i = $index) {
+    <div class="row" (mouseleave)="clearHover()" (mouseenter)="setHover(i)">
+        <div class="image-box">
+            <a [routerLink]="['/creation/creation-character', game.id]" [queryParams]="{ mode: game.mode }">
+                <img src="{{ url }}/api/map/{{ game.id }}/image" onerror="this.src='assets/img-not-found.png'; this.onerror=null;" />
+            </a>
+        </div>
+        <div class="game-content-box">
+            <div class="top-box">
+                <div class="name-box">{{ game.name }}</div>
+                <div class="game-mode-box">{{ game.mode }}</div>
+                <div class="game-mode-box" style="width: 4rem; min-width: 4rem">{{ game.size }} x {{ game.size }}</div>
+            </div>
+            <div class="description-box" [ngClass]="{ visible: hoverIndex === i, hidden: hoverIndex !== i }">{{ game.description }}</div>
+            <div class="bottom-box">
+                <div class="date-box">{{ game.lastModified }}</div>
+            </div>
+        </div>
+    </div>
+    }
+</div>

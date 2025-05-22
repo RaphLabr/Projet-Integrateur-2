@@ -1,0 +1,40 @@
+<div class="size-choice" [ngClass]="{ hidden: sizeChoiceVisibility }">
+    <form class="form-box" #formRef="ngForm" (ngSubmit)="onSubmit(formRef, sizeInput)">
+        <div class="size-column">
+            <button class="size-button" type="submit" (click)="sizeInput = 'small'">10 x 10</button>
+            <button class="size-button" type="submit" (click)="sizeInput = 'medium'">15 x 15</button>
+            <button class="size-button" type="submit" (click)="sizeInput = 'large'">20 x 20</button>
+        </div>
+        <input type="checkbox" id="toggle" class="toggleCheckbox" [(ngModel)]="toggleState" name="toggle" />
+        <label for="toggle" class="toggleContainer">
+            <div>Classique</div>
+            <div>Capture du drapeau</div>
+        </label>
+    </form>
+    <div class="return-button" (click)="toggleSizeChoice()">Retour</div>
+</div>
+<div class="create-button" (click)="toggleSizeChoice()">Créer Jeux</div>
+<div class="content">
+    @for (game of games; track $index; let i = $index) {
+    <div class="row" (mouseleave)="clearHover()">
+        <div class="image-box" (mouseenter)="setHover(i)">
+            <div class="img-hidden" [ngClass]="{ hidden: !game.visibility }"><p>Caché</p></div>
+            <img src="{{ url }}/api/map/{{ game.id }}/image" onerror="this.src='assets/img-not-found.png'; this.onerror=null;" />
+        </div>
+        <div class="game-content-box">
+            <div class="top-box">
+                <div class="name-box">{{ game.name }}</div>
+                <div class="game-mode-box">{{ game.mode }}</div>
+                <div class="game-mode-box" style="width: 4rem; min-width: 4rem">{{ game.size }} x {{ game.size }}</div>
+            </div>
+            <div class="description-box" [ngClass]="{ visible: hoverIndex === i, hidden: hoverIndex !== i }">{{ game.description }}</div>
+            <div class="bottom-box">
+                <div class="date-box">{{ game.lastModified }}</div>
+                <div class="button-box" (click)="changeVisibility(i)">Visibilité</div>
+                <div class="button-box" (click)="editGame(i)">Modifier</div>
+                <div class="button-box" (click)="deleteGame(i)">Effacer</div>
+            </div>
+        </div>
+    </div>
+    }
+</div>

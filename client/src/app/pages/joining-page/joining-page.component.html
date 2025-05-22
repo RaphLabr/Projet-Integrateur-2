@@ -1,0 +1,26 @@
+<div class="content">
+    <div class="form-box">
+        <form #joiningForm="ngForm">
+            <div class="input-box">
+                <label for="name">Rejoindre une partie:</label>
+                <input
+                    type="text"
+                    id="lobbyId"
+                    class="lobbyId"
+                    name="lobbyId"
+                    placeholder="Entrez l'identifiant de partie"
+                    [(ngModel)]="lobbyId"
+                    maxlength="4"
+                    minlength="4"
+                    (keydown.enter)="onSubmit()"
+                    required
+                    oninput="this.value=this.value.replace(/(?![0-9])./g,'')"
+                    (keyup.enter)="onSubmit()"
+                />
+            </div>
+            <div class="button-container">
+                <button type="button" class="submit-button" (click)="onSubmit()" [disabled]="joiningForm.invalid">Rejoindre la partie</button>
+            </div>
+        </form>
+    </div>
+</div>

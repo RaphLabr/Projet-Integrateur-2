@@ -1,0 +1,28 @@
+@use 'colors' as *;
+
+.header {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: color(header);
+    color: color(header, 'text');
+    padding: 0.4rem;
+    box-shadow: 0 2px 4px color(shadow, 'lighter');
+    width: 100%;
+    z-index: 10;
+}
+
+.logo {
+    height: 3rem;
+    width: auto;
+    margin-right: 1rem;
+    cursor: pointer;
+}
+
+h1 {
+    margin: 0;
+    font-size: 3rem;
+    padding-right: 20px;
+}

@@ -1,0 +1,97 @@
+<div class="content">
+    <div class="form-box">
+        <form #characterForm="ngForm">
+            <div class="character-select-box">
+                <div class="character-select">
+                    @for (character of characters; track character){
+                    <div class="box">
+                        <img
+                            src="{{ 'assets/characters/' + character + '.png' }}"
+                            alt="Character Image"
+                            class="character-img player-img-background"
+                            draggable="false"
+                            [class.disabled-img]="!isCharacterAvailable(character)"
+                        />
+                        <mat-radio-group name="selectedCharacter" [(ngModel)]="selectedCharacterId" required>
+                            <mat-radio-button
+                                [value]="character"
+                                [disabled]="!isCharacterAvailable(character)"
+                                [class.disabled-button]="!isCharacterAvailable(character)"
+                                (click)="onCharacterSelect(character)"
+                            >
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    }
+                </div>
+            </div>
+            <div class="row-box">
+                <div class="attributes-description">
+                    <p>Votre Personnage aura quatre attributs qui sont les suivants:</p>
+                    <ul>
+                        <li><strong>Vie:</strong> Le nombre de points de vie du personnage.</li>
+                        <li>
+                            <strong>Rapidité:</strong> Sert à déterminer l'ordre des tours et correspond aussi aux points de mouvement par tour du
+                            personnage.
+                        </li>
+                        <li><strong>Attaque:</strong> La force avec laquelle une attaque est faite sur l'adversaire.</li>
+                        <li><strong>Défense:</strong> La capacité à bloquer l'attaque d'un adversaire.</li>
+                    </ul>
+                    <p>Tous vos attributs commencent au niveau <strong>4</strong> par défaut.</p>
+                    <p>
+                        Vous avez la possibilité de donner un bonus de <strong>2</strong> niveaux à l'attribut <strong>Vie</strong> ou
+                        <strong>Rapidité</strong>.
+                    </p>
+                    <p>
+                        Vous disposez d'un dé de 6 face et d'un dé de 4 faces que vous devez attribuer à votre attribut <strong>Défense</strong> ou
+                        <strong>Attaque</strong>
+                    </p>
+                </div>
+                <div class="column-box">
+                    <div class="input-box">
+                        <label for="name">Nom du personnage:</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Entrez le nom"
+                            [(ngModel)]="characterName"
+                            maxlength="25"
+                            minlength="1"
+                            required
+                        />
+                    </div>
+                    <div class="input-box">
+                        Choisissez votre bonus:
+                        <div class="button-toggle-group">
+                            <label class="button-toggle">
+                                <input type="radio" name="bonus" value="vie" [(ngModel)]="selectedBonus" required />
+                                <span>Vie +2</span>
+                            </label>
+                            <label class="button-toggle">
+                                <input type="radio" name="bonus" value="rapidite" [(ngModel)]="selectedBonus" required />
+                                <span>Rapidité +2</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="input-box">
+                        Choisissez votre combinaison de dé:
+                        <div class="button-toggle-group">
+                            <label class="button-toggle">
+                                <input type="radio" name="dice" value="6defence" [(ngModel)]="selectedDice" required />
+                                <span>D6 Défense<br /><br />D4 Attaque</span>
+                            </label>
+                            <label class="button-toggle">
+                                <input type="radio" name="dice" value="4defence" [(ngModel)]="selectedDice" required />
+                                <span>D6 Attaque<br /><br />D4 Défense</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="button-container">
+                <button type="button" class="submit-button" (click)="onSubmit()" [disabled]="characterForm.invalid">Confirmer vos choix</button>
+            </div>
+        </form>
+    </div>
+</div>

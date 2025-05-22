@@ -1,0 +1,12 @@
+export const NOTIFICATION_DURATION_S = 3;
+export const NUMBER_OF_MS_IN_S = 1000;
+export const SERVER_DELAY_BUFFER = 100;
+export const GENERAL_BUFFER = 10;
+export const PLAY_PHASE_DURATION = 30;
+export const COMBAT_DURATION = 5;
+export const COMBAT_DURATION_NO_EVADES = 3;
+export const NOTIFICATION_DURATION_MS = 3000;
+export const TIMEOUT_DURATION = 3000;
+export const MOVEMENT_DELAY = 150;
+export const MINUTE = 60;
+export const PERCENTAGE = 100;
